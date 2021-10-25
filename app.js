@@ -9,12 +9,23 @@ const app = Vue.createApp({
       monsterHealth: 100,
       currentRound: 0,
       winner: null,
+      monsterBarColor: "#00a876",
     };
   },
   computed: {
     monsterBarStyles() {
+      if (this.monsterHealth < 0) {
+        this.monsterHealth = 0;
+      }
+      if (this.monsterHealth < 30) {
+        this.monsterBarColor = "red";
+      } else if (this.monsterHealth < 60) {
+        this.monsterBarColor = "orange";
+      }
+
       return {
         width: this.monsterHealth + "%",
+        backgroundColor: this.monsterBarColor,
       };
     },
     playerBarStyles() {
@@ -74,6 +85,16 @@ const app = Vue.createApp({
         this.playerHealth += healValue;
       }
       this.attackPlayer();
+    },
+    newGame() {
+      this.currentRound = 0;
+      this.winner = null;
+      this.playerHealth = 100;
+      this.monsterHealth = 100;
+      this.monsterBarColor = "#00a876";
+    },
+    surrender() {
+      this.winner = "monster";
     },
   },
 });
