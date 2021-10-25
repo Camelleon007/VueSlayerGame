@@ -10,6 +10,8 @@ const app = Vue.createApp({
       currentRound: 0,
       winner: null,
       monsterBarColor: "#00a876",
+      playerBarColor: "#00a876",
+      logs: [],
     };
   },
   computed: {
@@ -28,9 +30,17 @@ const app = Vue.createApp({
         backgroundColor: this.monsterBarColor,
       };
     },
+
     playerBarStyles() {
+      if (this.playerHealth < 30) {
+        this.playerBarColor = "red";
+      } else if (this.playerHealth < 60) {
+        this.playerBarColor = "orange";
+      }
+
       return {
         width: this.playerHealth + "%",
+        backgroundColor: this.playerBarColor,
       };
     },
     specialAttackAvailable() {
@@ -60,7 +70,9 @@ const app = Vue.createApp({
   methods: {
     attackMonster() {
       this.currentRound++;
-      this.monsterHealth -= randomValue(12, 7);
+      const damageValue = randomValue(14, 7);
+      this.monsterHealth -= damageValue;
+      this.logAction("Player attacks - " + damageValue);
       this.attackPlayer();
     },
     attackPlayer() {
@@ -70,10 +82,13 @@ const app = Vue.createApp({
       } else {
         this.playerHealth -= damageValue;
       }
+      this.logAction("Monster attacks - " + damageValue);
     },
     specialAttack() {
       this.currentRound++;
-      this.monsterHealth -= randomValue(25, 15);
+      const damageValue = randomValue(25, 15);
+      this.monsterHealth -= damageValue;
+      this.logAction("Player uses special attack - " + damageValue);
       this.attackPlayer();
     },
     healPlayer() {
@@ -84,6 +99,7 @@ const app = Vue.createApp({
       } else {
         this.playerHealth += healValue;
       }
+      this.logAction("Player heals + " + healValue);
       this.attackPlayer();
     },
     newGame() {
@@ -92,9 +108,15 @@ const app = Vue.createApp({
       this.playerHealth = 100;
       this.monsterHealth = 100;
       this.monsterBarColor = "#00a876";
+      this.playerBarColor = "#00a876";
+      this.logs = [];
     },
     surrender() {
       this.winner = "monster";
+    },
+    logAction(action) {
+      console.log(action);
+      this.logs.unshift(action);
     },
   },
 });

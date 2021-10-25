@@ -18,12 +18,14 @@
     </header>
     <div id="game">
       <section id="monster" class="container">
+        <img src="images/monster.png" alt="monster" />
         <h2>Monster Health: {{monsterHealth}}</h2>
         <div class="healthbar">
           <div class="healthbar__value" :style="monsterBarStyles"></div>
         </div>
       </section>
       <section id="player" class="container">
+        <img src="images/knight.png" alt="player" />
         <h2>Your Health: {{playerHealth}}</h2>
         <div class="healthbar">
           <div class="healthbar__value" :style="playerBarStyles"></div>
@@ -46,7 +48,9 @@
       </section>
       <section id="log" class="container">
         <h2>Battle Log</h2>
-        <ul></ul>
+        <ul>
+          <li v-for="action in logs">{{ action }}</li>
+        </ul>
       </section>
     </div>
   </body>
