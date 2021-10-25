@@ -1,7 +1,5 @@
-function damageValue(strength) {
-  return (
-    Math.floor(Math.random() * (strength - (strength - 7))) + (strength - 7)
-  );
+function randomValue(max, min) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 const app = Vue.createApp({
@@ -30,15 +28,30 @@ const app = Vue.createApp({
   methods: {
     attackMonster() {
       this.currentRound++;
-      this.monsterHealth -= damageValue(12);
+      this.monsterHealth -= randomValue(12, 7);
       this.attackPlayer();
     },
     attackPlayer() {
-      this.playerHealth -= damageValue(18);
+      const damageValue = randomValue(18, 13);
+      if (this.playerHealth - damageValue < 0) {
+        this.playerHealth = 0;
+      } else {
+        this.playerHealth -= damageValue;
+      }
     },
     specialAttack() {
       this.currentRound++;
-      this.monsterHealth -= damageValue(25);
+      this.monsterHealth -= randomValue(25, 15);
+      this.attackPlayer();
+    },
+    healPlayer() {
+      this.currentRound++;
+      const healValue = randomValue(20, 10);
+      if (this.playerHealth + healValue > 100) {
+        this.playerHealth = 100;
+      } else {
+        this.playerHealth += healValue;
+      }
       this.attackPlayer();
     },
   },
